@@ -24,13 +24,6 @@
     <?= $this->Form->button('Save order', ['id' => 'save-order']) ?>
     <?= $this->Form->end() ?>
     <?php endif; ?>
-    <?php foreach ($data as $key => $asset): ?>
-    <div class="asset" id="<?= $asset->idAsset ?>">
-        <p class="order"><?= $key+1 ?></p>
-        <img src="<?= $this->Url->build($asset->imagePath, true) ?>">
-        <p><?= $asset->description ?></p>
-    </div>
-    <?php endforeach; ?>
     <?php if ($isAdmin): ?>
     <div id="new-asset">
         <div id="dropzone">
@@ -45,4 +38,11 @@
         </div>
     </div>
     <?php endif; ?>
+    <?php foreach ($data as $key => $asset): ?>
+    <div class="asset" id="<?= $asset->idAsset ?>">
+        <p class="order"><?= $key+1 ?></p>
+        <img src="<?= $this->Url->build($asset->imagePath, true) ?>">
+        <p><?= $asset->description ?></p>
+    </div>
+    <?php endforeach; ?>
 </div>

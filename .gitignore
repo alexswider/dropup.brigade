@@ -1,2 +1,6 @@
 /config/app.php
 /nbproject/
+/webroot/uploads/
+!/webroot/uploads/empty
+/tmp/
+!/tmp/empty

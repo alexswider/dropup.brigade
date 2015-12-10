@@ -10,7 +10,6 @@ class MediaTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->notEmpty('description')
             ->notEmpty('width')
             ->notEmpty('height');
             
