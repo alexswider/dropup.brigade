@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Cake\I18n\Time;
 use Cake\Event\Event;
+use Aws\S3\S3Client;
 use ZipArchive;
 
 class  SlidersController extends AppController
@@ -164,7 +165,16 @@ class  SlidersController extends AppController
         $this->loadModel('Items');
         
         $item = $this->Items->get($idItem);
-        if($this->Items->delete($item) && $this->rrmdir('uploads'. DS . $idItem)) {
+        if($this->Items->delete($item)) {
+            $this->rrmdir('uploads'. DS . $idItem);
+            $client = S3Client::factory([
+                'credentials' => [
+                    'key'    => CronController::KEY,
+                    'secret' => CronController::SECRET,
+                ]
+            ]);
+            $client->deleteMatchingObjects(CronController::BUCKET, 'uploads'. DS . $idItem);
+            
             $this->Flash->success(__('The item has been deleted.'));
             return $this->redirect('/');
         }

@@ -47,6 +47,8 @@ Router::scope('/', function ($routes) {
      * its action called 'display', and we pass a param to select the view file
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
+    $routes->connect('/cron', ['controller' => 'Cron']);
+    $routes->connect('/cron/start', ['controller' => 'Cron', 'action' => 'start']);
     $routes->connect('/users/login', ['controller' => 'Users', 'action' => 'login']);
     $routes->connect('/users/logout', ['controller' => 'Users', 'action' => 'logout']);
     $routes->connect('/users/add-admin', ['controller' => 'Users', 'action' => 'addAdmin']);

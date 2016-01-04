@@ -3,7 +3,7 @@
 <?php $this->Html->addCrumb($item->name, '/' . $client->urlName . '/' . $project->urlName . '/' . $item->idItem) ?>
 
 <?php if (isset($data)) : ?>
-    <iframe src="<?= $this->Html->Url->build($data->path.'index.html')?>" width="<?= $data->width ?>" height="<?= $data->height ?>" scrolling="no"></iframe>
+<iframe src="<?= $this->Link->dropupLink($data->cdn, $data->path.'index.html')?>" width="<?= $data->width ?>" height="<?= $data->height ?>" scrolling="no"></iframe>
     <p class="description"><?= $data->description ?></p>
 <?php elseif ($isAdmin): ?>
     <?= $this->Html->script('jquery-2.1.4.min') ?>

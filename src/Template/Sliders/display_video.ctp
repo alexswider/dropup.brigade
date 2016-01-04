@@ -4,7 +4,7 @@
 
 <?php if (isset($data)) : ?>
     <video width="<?= $data->width ?>" height="<?= $data->height ?>" controls>
-        <source src="<?= $this->Html->Url->build($data->videoPath)?>" type="video/mp4">
+        <source src="<?= $this->Link->dropupLink($data->cdn, $data->videoPath)?>" type="video/mp4">
         Your browser does not support the video tag.
     </video>
     <p class="description"><?= $data->description ?></p>

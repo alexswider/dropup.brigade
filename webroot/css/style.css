@@ -173,3 +173,8 @@ iframe {
     display: inline-block;
     width: 49%;
 }
+
+#logs {
+    white-space: pre-line; 
+    font-size: 12px
+}
