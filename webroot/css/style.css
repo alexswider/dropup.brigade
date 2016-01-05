@@ -178,3 +178,9 @@ iframe {
     white-space: pre-line; 
     font-size: 12px
 }
+
+div#blocker-detect {
+    position: absolute;
+    right: 10px;
+    top: 40px;
+}
