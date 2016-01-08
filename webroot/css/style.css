@@ -87,7 +87,6 @@ iframe {
 }
 
 #assets {
-    width: 800px;
     margin: 0 25px;
 }
 
@@ -100,16 +99,11 @@ iframe {
 }
 
 #assets > .asset {
-    width: 100%;
+    max-width: 100%;
     padding: 10px;
-    text-align: center;
 }
 
-#assets > .asset > p {
-    margin: 15px;
-}
-
-#assets > .asset > .order {
+.asset > .order {
     position: relative;
     width: 50px;
     height: 50px;
@@ -120,6 +114,7 @@ iframe {
     text-align: center;
     line-height: 50px;
     font-size: 24px;
+    cursor: move;
 }
 
 #new-asset {

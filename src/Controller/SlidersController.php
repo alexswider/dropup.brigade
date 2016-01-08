@@ -9,6 +9,7 @@ use ZipArchive;
 
 class  SlidersController extends AppController
 {
+
     public function beforeFilter(Event $event)
     {
         $this->Auth->allow(['index', 'displayProjects', 'displayItems', 'displayItem']);
@@ -131,19 +132,19 @@ class  SlidersController extends AppController
         }
     }
     
-    public function saveOrder($idItem)
+    public function saveOrder($type, $idItem)
     {
         if ($this->Auth->user('type') != 'admin') {
             $this->Flash->error(__('You do not have permission.'));
             return $this->redirect(['controller' => 'users', 'action' => 'login']);
         }
         
-        $this->loadModel('Assets');
+        $model = $this->loadModel($type);
         
         $order = json_decode($this->request->data['orderAsset'], true);
         
         foreach ($order as $key => $id) {
-            $query = $this->Assets->query();
+            $query = $model->query();
             $query->update()
                     ->set(['orderAsset' => $key])
                     ->where(['idItem' => $idItem, 'idAsset' => $id])
@@ -300,7 +301,9 @@ class  SlidersController extends AppController
         $res = $zip->open($path.'tmp.zip');
         
         if($res == TRUE) {
-            $path = 'uploads'. DS . $idItem . DS;
+            $folder = uniqid();
+            mkdir($path . DS . $idItem . $folder);
+            $path = 'uploads'. DS . $idItem . DS . $folder . DS;
             $zip->extractTo($path);
             $zip->close();
         } else {
@@ -311,7 +314,7 @@ class  SlidersController extends AppController
     }
     
     private function saveMp4($videoData, $idItem) {
-        $path = 'uploads'. DS . $idItem . DS . 'video.mp4';
+        $path = 'uploads'. DS . $idItem . DS . uniqid() . '.mp4';
         $videoData = explode(",", $videoData);
         file_put_contents($path, base64_decode($videoData[1]));
 
@@ -335,7 +338,7 @@ class  SlidersController extends AppController
         $media = $this->Media
             ->find()
             ->where(['idItem' => $idItem])
-            ->first();
+            ->order(['orderAsset' => 'ASC']);
         
         return $media;
     }
@@ -345,7 +348,7 @@ class  SlidersController extends AppController
         $video = $this->Videos
             ->find()
             ->where(['idItem' => $idItem])
-            ->first();
+            ->order(['orderAsset' => 'ASC']);
         
         return $video;
     }

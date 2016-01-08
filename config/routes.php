@@ -55,15 +55,17 @@ Router::scope('/', function ($routes) {
     $routes->connect('/users/add-client', ['controller' => 'Users', 'action' => 'addClient']);
     $routes->connect('/users', ['controller' => 'Users']);
     
-    $routes->connect('/deleteItem/:item', ['controller' => 'Sliders', 'action' => 'deleteItem'],
+    $routes->connect('/deleteItem/:item', 
+            ['controller' => 'Sliders', 'action' => 'deleteItem'],
             ['item' => '\d+', 'pass' => ['item']]);
-    $routes->connect('/deleteProject/:project', ['controller' => 'Sliders', 'action' => 'deleteProject'],
+    $routes->connect('/deleteProject/:project', 
+            ['controller' => 'Sliders', 'action' => 'deleteProject'],
             ['project' => '\d+', 'pass' => ['project']]);
+    $routes->connect('/saveOrder/:typeItem/:idItem', 
+            ['controller' => 'Sliders', 'action' => 'saveOrder'],
+            ['type' => '\s', 'idItem' => '\d+', 'pass' => ['typeItem', 'idItem']]);
 
     $routes->connect('/', ['controller' => 'Sliders', 'action' => 'index']);
-    $routes->connect('/saveOrder/:item', 
-            ['controller' => 'Sliders', 'action' => 'saveOrder'],
-            ['item' => '\d+', 'pass' => ['item']]);
     $routes->connect('/:clientName', 
             ['controller' => 'Sliders', 'action' => 'displayProjects'], 
             ['client' => '\s', 'pass' => ['clientName']]);

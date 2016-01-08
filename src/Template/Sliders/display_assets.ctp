@@ -18,25 +18,23 @@
 <?php endif; ?>
 <div id="assets">
     <?php if ($isAdmin): ?>
-    <?= $this->Form->create(null, ['url' => '/saveOrder/' . $idItem]) ?>
+    <?= $this->Form->create(null, ['url' => '/saveOrder/Assets/' . $idItem]) ?>
     <?= $this->Form->input('refpage', ['type' => 'hidden', 'value' => $this->request->here]) ?>
     <?= $this->Form->input('orderAsset', ['type' => 'hidden', 'id' => 'orderAsset']) ?>
     <?= $this->Form->button('Save order', ['id' => 'save-order']) ?>
     <?= $this->Form->end() ?>
-    <?php endif; ?>
-    <?php if ($isAdmin): ?>
-    <div id="new-asset">
-        <div id="dropzone">
-            <p>Add new asset</p>
+        <div id="new-asset">
+            <div id="dropzone">
+                <p>Add new asset</p>
+            </div>
+            <div id="info">
+                <?= $this->Form->create() ?>
+                <?= $this->Form->input('image', ['type' => 'hidden']) ?>
+                <?= $this->Form->input('description') ?>
+                <?= $this->Form->button('Save') ?>
+                <?= $this->Form->end() ?>
+            </div>
         </div>
-        <div id="info">
-            <?= $this->Form->create() ?>
-            <?= $this->Form->input('image', ['type' => 'hidden']) ?>
-            <?= $this->Form->input('description') ?>
-            <?= $this->Form->button('Save') ?>
-            <?= $this->Form->end() ?>
-        </div>
-    </div>
     <?php endif; ?>
     <?php foreach ($data as $key => $asset): ?>
     <div class="asset" id="<?= $asset->idAsset ?>">
