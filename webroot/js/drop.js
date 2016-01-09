@@ -1,5 +1,6 @@
 var dropper;
 var results;
+var count = 0;
 
 $(document).ready(function() {
     droper();
@@ -26,6 +27,7 @@ function droper() {
 
     dropper.ondragover = function () { dropper.className = 'hover'; return false; };
     dropper.ondragend = function () { dropper.className = ''; return false; };
+    dropper.ondragleave = function () {dropper.className = ''; return false; };
     dropper.ondrop = function (e) {
         e.preventDefault();
         var files = [].slice.call(e.dataTransfer.files);
@@ -47,11 +49,16 @@ function fileLoaded(filename, dataUri) {
     $('#new-asset > #info').slideDown('slow');
 
     if(/^data:image/.test(dataUri)) {
-        results.style.height = 'auto';
-        var img = document.createElement("img");
-        img.src = dataUri;
-        results.appendChild(img);
-        $('#image').val(dataUri);
+        if(count > 0) {
+            results.innerHTML = "<p>Multi images: " + parseInt(count + 1) +"</p>";
+        } else {
+            results.style.height = 'auto';
+            var img = document.createElement("img");
+            img.src = dataUri;
+            results.appendChild(img);
+        }
+        $('#images-' + count).val(dataUri)
+            .after('<input type="hidden" name="images[' + ++count + ']" id="images-' + count + '">');
     } else {
         var name = document.createElement("p");
         name.innerHTML = filename;

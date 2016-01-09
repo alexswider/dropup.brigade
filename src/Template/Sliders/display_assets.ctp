@@ -28,8 +28,8 @@
                 <p>Add new asset</p>
             </div>
             <div id="info">
-                <?= $this->Form->create() ?>
-                <?= $this->Form->input('image', ['type' => 'hidden']) ?>
+                <?= $this->Form->create(null, ["id" => "image-form"]) ?>
+                <?= $this->Form->input('images[0]', ['type' => 'hidden']) ?>
                 <?= $this->Form->input('description') ?>
                 <?= $this->Form->button('Save') ?>
                 <?= $this->Form->end() ?>

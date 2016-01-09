@@ -21,9 +21,11 @@ class  SlidersController extends AppController
         $user = $this->Auth->user();
         
         if($user['type'] == 'admin') {
-            $clients = $this->Clients->find();
+            $clients = $this->Clients->find()
+                    ->order(['name' => 'ASC']);
         } else {
-            $clients = $this->Clients->find()->where(['private' => 0]);
+            $clients = $this->Clients->find()->where(['private' => 0])
+                    ->order(['name' => 'ASC']);
         }
         if($user['type'] == 'client') {
             $privateClients = $this->Clients->find()->where(['private' => 1, 'idClient' => $user['idClient']]);
@@ -56,7 +58,8 @@ class  SlidersController extends AppController
         
         $projects = $this->Projects
                 ->find('All')
-                ->where(['idClient' => $client->idClient]);
+                ->where(['idClient' => $client->idClient])
+                ->order(['name' => 'ASC']);
         
         if ($this->request->is('post')) {
             if ($this->Auth->user('type') != 'admin') {
@@ -95,7 +98,8 @@ class  SlidersController extends AppController
         foreach ($itemsDate as $key => $date) {
             $items[$key] = $this->Items
                 ->find('All')
-                ->where(['idProject' => $project->idProject, 'date' => $date->date]);
+                ->where(['idProject' => $project->idProject, 'date' => $date->date])
+                ->order(['name' => 'ASC']);
         }
         
         if ($this->request->is('post')) {
@@ -357,17 +361,22 @@ class  SlidersController extends AppController
     {
         $this->loadModel('Assets');
         
-        $asset = $this->Assets->newEntity([
-            'idItem' => $idItem, 
-            'description' => $requestData['description'],
-            'imagePath' => $this->saveImage($requestData['image'], $idItem),
-            'orderAsset' => $nextOrder
-        ]);
-        if ($idItem && $this->Assets->save($asset)) {
-            $this->Flash->success(__('Asset has been saved.'));
-            return $this->redirect($clientName . '/' . $projectName . '/' . $idItem);
+        foreach ($requestData['images'] as $imageData) {
+            if(!empty($imageData)) {
+                $asset = $this->Assets->newEntity([
+                    'idItem' => $idItem, 
+                    'description' => $requestData['description'],
+                    'imagePath' => $this->saveImage($imageData, $idItem),
+                    'orderAsset' => $nextOrder
+                ]);
+                if ($idItem && $this->Assets->save($asset)) {
+                    $this->Flash->success(__('Asset has been saved.'));
+                } else {
+                    $this->Flash->error(__('Unable to add your asset.'));
+                }
+            }
         }
-        $this->Flash->error(__('Unable to add your asset.'));
+        return $this->redirect($clientName . '/' . $projectName . '/' . $idItem);
     }
 
     private function saveImage($imageData, $idItem) 
