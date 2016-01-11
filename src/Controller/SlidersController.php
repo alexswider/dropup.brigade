@@ -306,7 +306,7 @@ class  SlidersController extends AppController
         
         if($res == TRUE) {
             $folder = uniqid();
-            mkdir($path . DS . $idItem . $folder);
+            mkdir($path . DS . $idItem . $folder, 0777, true);
             $path = 'uploads'. DS . $idItem . DS . $folder . DS;
             $zip->extractTo($path);
             $zip->close();
@@ -318,11 +318,13 @@ class  SlidersController extends AppController
     }
     
     private function saveMp4($videoData, $idItem) {
-        $path = 'uploads'. DS . $idItem . DS . uniqid() . '.mp4';
+        $path = 'uploads'. DS . $idItem . DS;
+        mkdir($path, 0777, true);
         $videoData = explode(",", $videoData);
-        file_put_contents($path, base64_decode($videoData[1]));
+        $file = $path . uniqid() . '.mp4';
+        file_put_contents($file, base64_decode($videoData[1]));
 
-        return $path;
+        return $file;
     }
     
     private function loadAssets($idItem) 
@@ -398,7 +400,9 @@ class  SlidersController extends AppController
         
         $imageData = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $imageData));
         
-        $file = "uploads/" . $idItem . '/' . uniqid() . $format;
+        $path = 'uploads'. DS . $idItem . DS;
+        mkdir($path, 0777, true);
+        $file = $path . uniqid() . $format;
 	file_put_contents($file, $imageData);
         
         return $file;
