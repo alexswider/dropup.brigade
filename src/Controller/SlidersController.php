@@ -181,8 +181,8 @@ class  SlidersController extends AppController
             $client->deleteMatchingObjects(CronController::BUCKET, 'uploads'. DS . $idItem);
             
             $this->Flash->success(__('The item has been deleted.'));
-            return $this->redirect('/');
         }
+        return $this->redirect($this->referer());
     }
     
     public function deleteAsset($idItem, $idAsset) 
@@ -244,8 +244,8 @@ class  SlidersController extends AppController
         $project = $this->Projects->get($idProject);
         if($this->Projects->delete($project)) {
             $this->Flash->success(__('The project has been deleted.'));
-            return $this->redirect('/');
         }
+        return $this->redirect($this->referer());
     }
 
     private function displayMedia($idItem, $projectName, $clientName) 
