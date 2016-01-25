@@ -42,7 +42,12 @@
     <?php endif; ?>
     <?php foreach ($data as $key => $media) : ?>
         <div class="asset" id="<?= $media->idAsset ?>">
-            <p class="order"><?= $key+1 ?></p>
+            <p class="order">
+                <?= $key+1 ?>
+                <?php if ($isAdmin): ?>
+                    <a href="/deleteAsset/<?= $item->idItem . '/' . $media->idAsset?>"><i class="fa fa-trash"></i></a>
+                <?php endif; ?>
+            </p>
             <iframe src="<?= $this->Link->dropupLink($media->cdn, $media->path.'index.html')?>" width="<?= $media->width ?>" height="<?= $media->height ?>" scrolling="no"></iframe>
             <p class="description"><?= $media->description ?></p>
         </div>

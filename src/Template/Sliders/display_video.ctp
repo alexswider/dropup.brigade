@@ -42,7 +42,12 @@
     <?php endif; ?>
     <?php foreach ($data as $key => $video) : ?>
         <div class="asset" id="<?= $video->idAsset ?>">
-            <p class="order"><?= $key+1 ?></p>
+            <p class="order">
+                <?= $key+1 ?>
+                <?php if ($isAdmin): ?>
+                    <a href="/deleteAsset/<?= $item->idItem . '/' . $video->idAsset?>"><i class="fa fa-trash"></i></a>
+                <?php endif; ?>
+            </p>
             <video width="<?= $video->width ?>" height="<?= $video->height ?>" controls>
                 <source src="<?= $this->Link->dropupLink($video->cdn, $video->videoPath)?>" type="video/mp4">
                 Your browser does not support the video tag.

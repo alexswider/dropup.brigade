@@ -38,7 +38,12 @@
     <?php endif; ?>
     <?php foreach ($data as $key => $asset): ?>
     <div class="asset" id="<?= $asset->idAsset ?>">
-        <p class="order"><?= $key+1 ?></p>
+        <p class="order">
+            <?= $key+1 ?>
+            <?php if ($isAdmin): ?>
+                <a href="/deleteAsset/<?= $item->idItem . '/' . $asset->idAsset?>"><i class="fa fa-trash"></i></a>
+            <?php endif; ?>
+        </p>
         <img src="<?= $this->Link->dropupLink($asset->cdn, $asset->imagePath) ?>">
         <p><?= $asset->description ?></p>
     </div>

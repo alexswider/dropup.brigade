@@ -58,6 +58,9 @@ Router::scope('/', function ($routes) {
     $routes->connect('/deleteItem/:item', 
             ['controller' => 'Sliders', 'action' => 'deleteItem'],
             ['item' => '\d+', 'pass' => ['item']]);
+    $routes->connect('/deleteAsset/:item/:asset', 
+            ['controller' => 'Sliders', 'action' => 'deleteAsset'],
+            ['item' => '\d+', 'item' => '\d+', 'pass' => ['item', 'asset']]);
     $routes->connect('/deleteProject/:project', 
             ['controller' => 'Sliders', 'action' => 'deleteProject'],
             ['project' => '\d+', 'pass' => ['project']]);

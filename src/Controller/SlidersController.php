@@ -185,6 +185,45 @@ class  SlidersController extends AppController
         }
     }
     
+    public function deleteAsset($idItem, $idAsset) 
+    {
+        if ($this->Auth->user('type') != 'admin') {
+            $this->Flash->error(__('You do not have permission.'));
+            return $this->redirect(['controller' => 'users', 'action' => 'login']);
+        }
+        
+        $this->loadModel("Items");
+        $item = $this->Items->get($idItem);
+        $model = $this->getModel($item->type);
+        $toRemove = $model->get($idAsset);
+        
+        if ($item->type == 'assets') {
+            $this->deleteDir($toRemove->imagePath);
+        } else if ($item->type == 'media') {
+            $this->deleteDir($toRemove->path);
+        } else if ($item->type == 'video') {
+            $this->deleteDir($toRemove->videoPath);
+        }
+        $model->delete($toRemove);
+        
+        return $this->redirect($this->referer());
+    }
+    
+    private function deleteDir($dir) {
+        if($this->rrmdir($dir)) {
+            $this->Flash->error(__('Asset remove from server.'));
+        }
+        $client = S3Client::factory([
+            'credentials' => [
+                'key'    => CronController::KEY,
+                'secret' => CronController::SECRET,
+            ]
+        ]);
+        if($client->deleteMatchingObjects(CronController::BUCKET, $dir) > 0) {
+            $this->Flash->error(__('File remove from CDN.'));
+        }
+    }
+    
     public function deleteProject($idProject) 
     {
         if ($this->Auth->user('type') != 'admin') {
@@ -430,16 +469,32 @@ class  SlidersController extends AppController
     }
 
     private function rrmdir($dir) 
-    { 
-        if (is_dir($dir)) { 
+    {
+        $status = FALSE;
+        if (is_dir($dir)) {
             $objects = scandir($dir); 
             foreach ($objects as $object) { 
                 if ($object != "." && $object != "..") { 
                     if (filetype($dir."/".$object) == "dir") $this->rrmdir($dir."/".$object); else unlink($dir."/".$object); 
+                    $status = TRUE;
                 } 
             } 
             reset($objects); 
             return rmdir($dir); 
-        } 
+        } else {
+            return unlink($dir);
+        }
+        
+        return $status;
+    }
+    
+    private function getModel($type) {
+        if ($type == 'assets') {
+            return $this->loadModel('Assets');
+        } else if ($type == 'media') {
+            return $this->loadModel('Media');
+        } else if ($type == 'video') {
+            return $this->LoadModel('Videos');
+        }
     }
 }
