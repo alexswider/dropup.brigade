@@ -32,7 +32,16 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <?= $cakeDescription ?>
+        
+        <?php 
+        if($client->name){ 
+            $title = $client->name.":".$project->name;
+            echo $title;
+        }else{
+            echo 'Portal';
+        }
+        ?>
+
     </title>
     <?= $this->Html->meta('icon') ?>
     <?= $this->Html->css('base.css') ?>
