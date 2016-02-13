@@ -32,7 +32,18 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <?= $cakeDescription ?>
+        Portal:
+
+        <?php if($client){ 
+            echo $project->name;
+        }else{
+            echo 'Main';
+        }
+
+        //     ->name, '/' . $client->urlName) 
+        // php $this->Html->addCrumb($project->name, '/' . $client->urlName . '/' . $project->urlName) 
+        // php $this->Html->addCrumb($item->name, '/' . $client->urlName . '/' . $project->urlName . '/' . $item->idItem) 
+    ?>
     </title>
     <?= $this->Html->meta('icon') ?>
     <?= $this->Html->css('base.css') ?>
