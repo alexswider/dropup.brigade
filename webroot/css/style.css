@@ -239,3 +239,8 @@ form {
     color: #000;
     font-size: 0.8em
 }
+/*fast fix for Thursday*/
+.metadata-show{
+    display: none;
+}
+
