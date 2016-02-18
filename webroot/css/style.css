@@ -108,7 +108,7 @@ iframe {
 }
 
 .asset > .order {
-    width: 4em;
+    float: left;
     margin: 0;
     padding: 0.1em 0.5em;
     text-align: center;
@@ -229,4 +229,13 @@ form {
 
 .container ul li {
     list-style: none;
+}
+
+.metadata {
+    position: absolute;
+    display: none;
+    padding: 10px;
+    background-color: #f00;
+    color: #000;
+    font-size: 0.8em
 }

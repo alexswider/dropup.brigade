@@ -16,6 +16,15 @@
     });
 </script>
 <?php endif; ?>
+<script>
+    $(document).ready(function() {
+        $(".metadata-show").hover(function() {
+            $(this).closest(".asset").children(".metadata").css("display", "inline-block");
+        }, function() {
+            $(this).closest(".asset").children(".metadata").hide();
+        });
+    });
+</script>
 <div id="assets">
     <?php if ($isAdmin): ?>
     <?= $this->Form->create(null, ['url' => '/saveOrder/Videos/' . $idItem]) ?>
@@ -47,7 +56,13 @@
                 <?php if ($isAdmin): ?>
                     <a href="/deleteAsset/<?= $item->idItem . '/' . $media->idAsset?>"><i class="fa fa-trash"></i></a>
                 <?php endif; ?>
+                <a class="metadata-show" href="#"><i class="fa fa-info"></i></a>
             </p>
+            <div class="metadata">
+                Date: <?= isset($media->date) ? $media->date->format('Y-m-d H:i:s') : "unknow"?> <br>
+                Dimensions: <?= $media->width ?> x <?= $media->height ?>
+            </div>
+            <div class="clearfix"></div>
             <iframe src="<?= $this->Link->dropupLink($media->cdn, $media->path.'index.html')?>" width="<?= $media->width ?>" height="<?= $media->height ?>" scrolling="no"></iframe>
             <p class="description"><?= $media->description ?></p>
         </div>

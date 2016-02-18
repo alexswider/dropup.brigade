@@ -2,8 +2,9 @@
 <?php $this->Html->addCrumb($project->name, '/' . $client->urlName . '/' . $project->urlName) ?>
 <?php $this->Html->addCrumb($item->name, '/' . $client->urlName . '/' . $project->urlName . '/' . $item->idItem) ?>
 
-<?php if ($isAdmin): ?>
 <?= $this->Html->script('jquery-2.1.4.min') ?>
+<?= $this->Html->script('imagesloaded.pkgd.min') ?>
+<?php if ($isAdmin): ?>
 <?= $this->Html->script('jquery-ui.min') ?>
 <?= $this->Html->script('drop') ?>
 
@@ -16,6 +17,23 @@
     });
 </script>
 <?php endif; ?>
+<script>
+    $(document).ready(function() {
+        $(".metadata-show").hover(function() {
+            $(this).closest(".asset").children(".metadata").css("display", "inline-block");
+        }, function() {
+            $(this).closest(".asset").children(".metadata").hide();
+        });
+    });
+    $(document).imagesLoaded(function() {
+        console.log("usz!");
+        $(".metadata").each(function() {
+            var img = $(this).siblings("img");
+            $(this).children(".meta-wid").html(img.width());
+            $(this).children(".meta-hei").html(img.height());
+        });
+    });
+</script>
 <div id="assets">
     <?php if ($isAdmin): ?>
     <?= $this->Form->create(null, ['url' => '/saveOrder/Assets/' . $idItem]) ?>
@@ -43,7 +61,13 @@
             <?php if ($isAdmin): ?>
                 <a href="/deleteAsset/<?= $item->idItem . '/' . $asset->idAsset?>"><i class="fa fa-trash"></i></a>
             <?php endif; ?>
+            <a class="metadata-show" href="#"><i class="fa fa-info"></i></a>
         </p>
+        <div class="metadata">
+            Date: <?= isset($asset->date) ? $asset->date->format('Y-m-d H:i:s') : "unknow"?> <br>
+            Dimensions: <span class="meta-wid"></span> x <span class="meta-hei"></span>
+        </div>
+        <div class="clearfix"></div>
         <img src="<?= $this->Link->dropupLink($asset->cdn, $asset->imagePath) ?>">
         <p><?= $asset->description ?></p>
     </div>
