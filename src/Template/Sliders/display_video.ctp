@@ -2,8 +2,8 @@
 <?php $this->Html->addCrumb($project->name, '/' . $client->urlName . '/' . $project->urlName) ?>
 <?php $this->Html->addCrumb($item->name, '/' . $client->urlName . '/' . $project->urlName . '/' . $item->idItem) ?>
 
-<?php if ($isAdmin): ?>
 <?= $this->Html->script('jquery-2.1.4.min') ?>
+<?php if ($isAdmin): ?>
 <?= $this->Html->script('jquery-ui.min') ?>
 <?= $this->Html->script('drop') ?>
 
