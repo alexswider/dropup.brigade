@@ -47,40 +47,7 @@ Router::scope('/', function ($routes) {
      * its action called 'display', and we pass a param to select the view file
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
-    $routes->connect('/cron', ['controller' => 'Cron']);
-    $routes->connect('/cron/start', ['controller' => 'Cron', 'action' => 'start']);
-    $routes->connect('/users/login', ['controller' => 'Users', 'action' => 'login']);
-    $routes->connect('/users/logout', ['controller' => 'Users', 'action' => 'logout']);
-    $routes->connect('/users/add-admin', ['controller' => 'Users', 'action' => 'addAdmin']);
-    $routes->connect('/users/add-client', ['controller' => 'Users', 'action' => 'addClient']);
-    $routes->connect('/users', ['controller' => 'Users']);
-    
-    $routes->connect('/deleteItem/:item', 
-            ['controller' => 'Sliders', 'action' => 'deleteItem'],
-            ['item' => '\d+', 'pass' => ['item']]);
-    $routes->connect('/deleteAsset/:item/:asset', 
-            ['controller' => 'Sliders', 'action' => 'deleteAsset'],
-            ['item' => '\d+', 'item' => '\d+', 'pass' => ['item', 'asset']]);
-    $routes->connect('/deleteProject/:project', 
-            ['controller' => 'Sliders', 'action' => 'deleteProject'],
-            ['project' => '\d+', 'pass' => ['project']]);
-    $routes->connect('/saveOrder/:typeItem/:idItem', 
-            ['controller' => 'Sliders', 'action' => 'saveOrder'],
-            ['type' => '\s', 'idItem' => '\d+', 'pass' => ['typeItem', 'idItem']]);
-
-    $routes->connect('/', ['controller' => 'Sliders', 'action' => 'index']);
-    $routes->connect('/:clientName', 
-            ['controller' => 'Sliders', 'action' => 'displayProjects'], 
-            ['client' => '\s', 'pass' => ['clientName']]);
-    $routes->connect('/:clientName/:projectName', 
-            ['controller' => 'Sliders', 'action' => 'displayItems'], 
-            ['client' => '\s', 'project' => '\s', 'pass' => ['clientName', 'projectName']]);
-    $routes->connect('/:clientName/:projectName/:item', 
-            ['controller' => 'Sliders', 'action' => 'displayItem'], 
-            ['client' => '\s', 'project' => '\s', 'item' => '\d+', 'pass' => ['clientName', 'projectName', 'item']]);
-    $routes->connect('/:clientName/:projectName/:new', 
-            ['controller' => 'Sliders', 'action' => 'displayItem'], 
-            ['client' => '\s', 'project' => '\s', 'item' => '\s', 'pass' => ['clientName', 'projectName', 'new']]);
+    $routes->connect('/', ['controller' => 'Clients', 'action' => 'index']);
 
     /**
      * ...and connect the rest of 'Pages' controller's URLs.

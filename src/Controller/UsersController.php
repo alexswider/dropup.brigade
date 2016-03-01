@@ -3,38 +3,22 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
 
-class UsersController extends AppController
-{
-    public function index() {
-        if ($this->Auth->user('type') != 'admin') {
-            $this->Flash->error(__('You do not have permission.'));
-            return $this->redirect(['controller' => 'users', 'action' => 'login']);
-        }
-        
-        $this->loadModel('Clients');
-        $clientsName = [];
-        
-        $admins = $this->Users
-                ->find()
-                ->where(['type' => 'admin']);
-        
-        $clients = $this->Users
-                ->find()
-                ->where(['type' => 'client']);
-        
-        $query = $this->Clients
-                ->find()
-                ->select(['idClient', 'name']);
-        
-        foreach ($query->toArray() as $a) {
-            $clientsName += [$a->idClient => $a->name];
-        }
-        
-        $this->set(compact('admins', 'clients', 'clientsName'));
+class UsersController extends AppController {
+    
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+        $this->Auth->allow(['logout']);
     }
-    public function login()
-    {
+    
+    public function index() {
+        $users = $this->Users->find();
+        
+        $this->set('users', $users);
+    }
+    
+    public function login() {
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
             if ($user) {
@@ -45,38 +29,53 @@ class UsersController extends AppController
         }
     }
     
-    public function logout()
-    {
+    public function logout() {
+        $this->Flash->success('You are logout successfully');
         return $this->redirect($this->Auth->logout());
     }
     
-    public function addAdmin() {
+    public function add() {
         $user = $this->Users->newEntity();
-        if ($this->request->is('post')) {
+        if($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->data);
-            $user->type = 'admin';
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-                return $this->redirect(['controller' => 'users']);
+            if($this->Users->save($user)) {
+                $this->Flash->success('New user has been saved.');
+                return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('Unable to add the user.'));
-            return $this->redirect(['controller' => 'users']);
+            return $this->Flash->error('Unable to add user.');
         }
+        
         $this->set('user', $user);
     }
     
-    public function addClient() {
-        $user = $this->Users->newEntity();
-        if ($this->request->is('post')) {
+    public function edit($id = null) {
+        $user = $this->Users->get($id);
+        if($this->request->is(['post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->data);
-            $user->type = 'client';
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-                return $this->redirect(['controller' => 'users']);
+            if($this->Users->save($user)) {
+                $this->Flash->success('User has been updated.');
+                parent::addLog('users', $id, 'Edit', 'Test');
+                return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('Unable to add the user.'));
-            return $this->redirect(['controller' => 'users']);
+            return $this->Flash->error('Unable to update user.');
         }
+        
+        $this->set('user', $user);
+    }
+    
+    public function delete($id) {
+        $this->request->allowMethod(['post', 'delete']);
+
+        $user = $this->Users->get($id);
+        if ($this->Users->delete($user)) {
+            $this->Flash->success('The user has been deleted.');
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+    
+    public function permissions($id = null) {
+        $user = $this->Users->get($id);
+        
         $this->set('user', $user);
     }
 }

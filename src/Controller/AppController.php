@@ -37,21 +37,13 @@ class AppController extends Controller
      *
      * @return void
      */
-    public function initialize()
-    {
+    public function initialize() {
         parent::initialize();
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
         $this->loadComponent('Auth', [
-            'authenticate' => [
-                'Form' => [
-                    'fields' => [
-                        'username' => 'username',
-                        'password' => 'password'
-                    ]
-                ]
-            ],
+            'authorize' => ['Controller'],
             'loginAction' => [
                 'controller' => 'Users',
                 'action' => 'login'
@@ -69,15 +61,21 @@ class AppController extends Controller
      * @param \Cake\Event\Event $event The beforeRender event.
      * @return void
      */
-    public function beforeRender(Event $event)
-    {
-        if (!array_key_exists('_serialize', $this->viewVars) &&
-            in_array($this->response->type(), ['application/json', 'application/xml'])
-        ) {
-            $this->set('_serialize', true);
-        }
-        $isAdmin = $this->Auth->user('type') == 'admin' ? true : false;
-        $this->set('isAdmin', $isAdmin);
+    public function beforeRender(Event $event) {
+
         $this->set('userData', $this->Auth->user());
+    }
+    
+    public function isAuthorized($user) {
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
+
+        return false;
+    }
+    
+    public function addLog($entity, $idEntity, $type, $message) {
+        $this->loadModel('Logs');
+        $this->Logs->add($entity, $idEntity, $this->Auth->user('idUser'), $type, $message);
     }
 }
