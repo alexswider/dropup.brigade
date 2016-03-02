@@ -1,3 +1,4 @@
+<h3>Users <?= $this->Html->link('Logs', ['controller' => 'logs', 'action' => 'show', 'users']) ?></h3>
 <table>
     <tr>
         <th>
@@ -25,6 +26,8 @@
             <?= $user->role ?>
         </td>
         <td>
+            <?= $this->Html->link('logs', ['controller' => 'logs', 'action' => 'show', 'users', $user->idUser]) ?>
+            <span>|</span>
             <?= $this->Html->link('edit', ['action' => 'edit', $user->idUser]) ?>
             <?php if ($user->role !== 'admin'): ?>
             <span>|</span>

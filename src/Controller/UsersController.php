@@ -38,8 +38,9 @@ class UsersController extends AppController {
         $user = $this->Users->newEntity();
         if($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->data);
-            if($this->Users->save($user)) {
+            if($result = $this->Users->save($user)) {
                 $this->Flash->success('New user has been saved.');
+                parent::addLog('users', $result->idUser, 'Create', "User has been created. Username: $result->username");
                 return $this->redirect(['action' => 'index']);
             }
             return $this->Flash->error('Unable to add user.');
@@ -52,9 +53,9 @@ class UsersController extends AppController {
         $user = $this->Users->get($id);
         if($this->request->is(['post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->data);
-            if($this->Users->save($user)) {
+            if($result = $this->Users->save($user)) {
                 $this->Flash->success('User has been updated.');
-                parent::addLog('users', $id, 'Edit', 'Test');
+                parent::addLog('users', $id, 'Edit', "User has been updated. Username: $result->username");
                 return $this->redirect(['action' => 'index']);
             }
             return $this->Flash->error('Unable to update user.');
@@ -69,6 +70,7 @@ class UsersController extends AppController {
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {
             $this->Flash->success('The user has been deleted.');
+            parent::addLog('users', $id, 'Delete', 'User has been deleted');
             return $this->redirect(['action' => 'index']);
         }
     }
