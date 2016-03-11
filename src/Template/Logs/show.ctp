@@ -38,7 +38,7 @@
             <?= $log->idEntity ?>
         </td>
         <td>
-            <?= $log->idUser ?>
+            <?= $log->user->username ?>
         </td>
         <td>
             <?= $log->type ?>

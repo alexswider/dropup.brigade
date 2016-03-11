@@ -1,4 +1,7 @@
-<h3>Users <?= $this->Html->link('Logs', ['controller' => 'logs', 'action' => 'show', 'users']) ?></h3>
+<h3>
+    Users 
+    <?= $this->Html->link('Logs', ['controller' => 'logs', 'action' => 'show', 'users']) ?>
+</h3>
 <table>
     <tr>
         <th>
@@ -29,7 +32,7 @@
             <?= $this->Html->link('logs', ['controller' => 'logs', 'action' => 'show', 'users', $user->idUser]) ?>
             <span>|</span>
             <?= $this->Html->link('edit', ['action' => 'edit', $user->idUser]) ?>
-            <?php if ($user->role !== 'admin'): ?>
+            <?php if ($user->role === 'client'): ?>
             <span>|</span>
             <?= $this->Html->link('set permissions', ['action' => 'permissions', $user->idUser]) ?>
             <?php endif; ?>

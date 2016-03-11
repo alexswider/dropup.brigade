@@ -62,8 +62,9 @@ class AppController extends Controller
      * @return void
      */
     public function beforeRender(Event $event) {
-
-        $this->set('userData', $this->Auth->user());
+        $userData = $this->Auth->user();
+        $userData['level'] = $this->getLevel();
+        $this->set('userData', $userData);
     }
     
     public function isAuthorized($user) {
@@ -77,5 +78,25 @@ class AppController extends Controller
     public function addLog($entity, $idEntity, $type, $message) {
         $this->loadModel('Logs');
         $this->Logs->add($entity, $idEntity, $this->Auth->user('idUser'), $type, $message);
+    }
+    
+    public function getLevel() {
+        if (!empty($this->Auth->user('role'))) {
+            $role = $this->Auth->user('role');
+        } else {
+            return 0;
+        }
+        switch ($role) {
+            case 'client':
+                return 1;
+            case 'account':
+                return 2;
+            case 'creative':
+                return 3;
+            case 'admin':
+                return 4;
+            default:
+                return 0;
+        }
     }
 }

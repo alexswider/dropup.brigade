@@ -73,8 +73,6 @@ iframe {
     overflow: hidden;
 }
 
-.date {}
-
 .date > h4 {
     color: #999;
     font-size: 12px;
@@ -143,30 +141,6 @@ iframe {
     line-height: 380px;
 }
 
-#dropzone > img {
-    border-radius: 22px;
-}
-
-.new-user {
-    display: none;
-    width: 200px;
-}
-
-.new-project {
-    display: none;
-    width: 200px;
-}
-
-.slide-form {
-    display: none;
-    width: 200px;
-}
-
-.inline div {
-    display: inline-block;
-    width: 49%;
-}
-
 #logs {
     white-space: pre-line;
     font-size: 12px
@@ -216,12 +190,6 @@ form {
     width: 400px;
 }
 
-.fa-eye-slash,
-.fa-trash {
-    margin-left: 1em;
-    color: #ff0;
-}
-
 .container ul {
     margin: 0 0 2em 0;
     padding: 0;
@@ -231,14 +199,6 @@ form {
     list-style: none;
 }
 
-.metadata {
-    position: absolute;
-    display: none;
-    padding: 10px;
-    background-color: #f00;
-    color: #000;
-    font-size: 0.8em
-}
 /*fast fix for Thursday*/
 .metadata-show{
     display: none;

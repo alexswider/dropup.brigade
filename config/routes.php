@@ -53,6 +53,18 @@ Router::scope('/', function ($routes) {
      * ...and connect the rest of 'Pages' controller's URLs.
      */
     $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+    
+    Router::connect('/projects/manage',
+            ['controller'=>'projects','action'=>'manage']);
+    Router::connect('/projects/edit',
+            ['controller'=>'projects','action'=>'edit']);
+    Router::connect('/projects/add',
+            ['controller'=>'projects','action'=>'add']);
+    Router::connect('/projects/delete',
+            ['controller'=>'projects','action'=>'delete']);
+    Router::connect('/projects/:slug',
+            ['controller'=>'projects','action'=>'index'], 
+            ['pass' => ['slug']]);
 
     /**
      * Connect catchall routes for all controllers.
