@@ -76,8 +76,42 @@ class UsersController extends AppController {
     }
     
     public function permissions($id = null) {
-        $user = $this->Users->get($id);
+        if($this->request->is(['post', 'put'])) {
+            $this->savePermissions($id, $this->request->data);
+        }
         
-        $this->set('user', $user);
+        $this->loadModel('Clients');
+        $this->loadModel('Permissions');
+        
+        $user = $this->Users->get($id);
+        $clients = $this->Clients
+                ->find()
+                ->contain('Projects')
+                ->where(['private' => 1]);
+        $permissions = $this->Permissions->getPermittedProjects($id);
+        
+        $this->set(compact('user', 'clients', 'permissions'));
+    }
+    
+    private function savePermissions($idUser, $data) {
+        $this->loadModel('Permissions');
+        
+        $this->Permissions->deleteAll(['idUser' => $idUser]);
+        $ids = '';
+        foreach ($data as $idProject => $perm) {
+            if ($perm) {
+                $ids .= "$idProject ";
+                $this->Permissions
+                        ->query()
+                        ->insert(['idUser', 'idProject'])
+                        ->values([
+                            'idUser' => $idUser,
+                            'idProject' => $idProject
+                        ])
+                        ->execute();
+                }
+        }
+        $this->Flash->success('Permissions has been updated.');
+        parent::addLog('users', $idUser, 'Permissions', "Permissions has been updated. Permissions: $ids");
     }
 }

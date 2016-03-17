@@ -72,7 +72,7 @@ class ClientsController extends AppController {
     public function delete($id) {
         $this->request->allowMethod(['post', 'delete']);
 
-        //TODO: $this->deleteProjects($id);
+        $this->deleteProjects($id);
         $client = $this->Clients->get($id);
         if ($this->Clients->delete($client)) {
             $this->Flash->success('The client has been deleted.');
@@ -89,7 +89,6 @@ class ClientsController extends AppController {
                 ->where(['idClient' => $idClient]);
         
         foreach ($ids as $id) {
-            $dupa = $id->idProject;
             $this->requestAction(['controller' => 'projects', 'action' => 'delete'], ['pass' => [$id->idProject]]);
         }
     }

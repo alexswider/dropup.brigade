@@ -28,6 +28,12 @@ class ProjectsController extends AppController {
                 ->find()
                 ->contain('Clients')
                 ->where(['Clients.slug' => $slug]);
+        
+        if (parent::getLevel() === 1 && $client['private']) {
+            $this->loadModel('Permissions');
+            $permitted = $this->Permissions->getPermittedProjects($this->Auth->user('idUser'));
+            $projects->where(['idProject IN' => $permitted]);
+        }
             
         $this->set('projects', $projects);
         $this->set('client', $client);
@@ -76,7 +82,8 @@ class ProjectsController extends AppController {
     public function delete($id) {
         //TODO: usuwanie wszystkiego wyżej !!!
         $this->request->allowMethod(['post', 'delete']);
-
+        
+        $this->loadModel('Projects');
         $project = $this->Projects->get($id);
         
         if ($this->Projects->delete($project)) {
