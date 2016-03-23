@@ -25,8 +25,7 @@ use Cake\Event\Event;
  *
  * @link http://book.cakephp.org/3.0/en/controllers.html#the-app-controller
  */
-class AppController extends Controller
-{
+class AppController extends Controller {
 
     /**
      * Initialization hook method.
@@ -42,6 +41,7 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
+        $this->loadComponent('Cookie');
         $this->loadComponent('Auth', [
             'authorize' => ['Controller'],
             'loginAction' => [
@@ -51,9 +51,25 @@ class AppController extends Controller
             'logoutRedirect' => [
                 'controller' => 'Users',
                 'action' => 'login',
+            ],
+            'authenticate' => [
+                'Form',
+                'Xety/Cake3CookieAuth.Cookie'
             ]
         ]);
     }
+    
+    public function beforeFilter(Event $event) {
+        if (!$this->Auth->user() && $this->Cookie->read('CookieAuth')) {
+            $user = $this->Auth->identify();
+            if ($user) {
+                $this->Auth->setUser($user);
+            } else {
+                $this->Cookie->delete('CookieAuth');
+            }
+        }
+    }
+
 
     /**
      * Before render callback.

@@ -15,5 +15,5 @@ $(function(){
         ]) ?>
         <?= $this->Form->hidden('idClient') ?>
    </fieldset>
-<?= $this->Form->button(__('Edit')); ?>
+<?= $this->Form->button(__('Save')); ?>
 <?= $this->Form->end() ?>
