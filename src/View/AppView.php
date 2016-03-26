@@ -36,6 +36,9 @@ class AppView extends View
      */
     public function initialize()
     {
-
+        parent::initialize();
+        if ($this->request->controller === 'Items') {
+            $this->loadHelper('Access');
+        }
     }
 }

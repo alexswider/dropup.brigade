@@ -65,6 +65,18 @@ Router::scope('/', function ($routes) {
     Router::connect('/projects/:slug',
             ['controller'=>'projects','action'=>'index'], 
             ['pass' => ['slug']]);
+    
+    Router::connect('/items/manage',
+            ['controller'=>'items','action'=>'manage']);
+    Router::connect('/items/edit',
+            ['controller'=>'items','action'=>'edit']);
+    Router::connect('/items/add',
+            ['controller'=>'items','action'=>'add']);
+    Router::connect('/items/delete',
+            ['controller'=>'items','action'=>'delete']);
+    Router::connect('/items/:slug',
+            ['controller'=>'items','action'=>'index'], 
+            ['pass' => ['slug']]);
 
     /**
      * Connect catchall routes for all controllers.

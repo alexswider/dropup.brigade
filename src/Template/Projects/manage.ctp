@@ -1,6 +1,7 @@
+<?php $this->Html->addCrumb($client->name, ['action' => 'index', $client->slug]) ?>
 <h3>
     Projects 
-    <?= $this->Html->link('Logs', ['controller' => 'logs', 'action' => 'show', 'projects']) ?>
+    <?= $userData['level'] > 3 ? $this->Html->link('Logs', ['controller' => 'logs', 'action' => 'show', 'projects']) : '' ?>
 </h3>
 <table>
     <tr>
@@ -43,7 +44,7 @@
     <?php endforeach; ?>
     <tr>
         <td colspan="4">
-            <?= $this->Html->link('Add new project', ['action' => 'add', $idClient]) ?>
+            <?= $this->Html->link('Add new project', ['action' => 'add', $client->idClient]) ?>
         </td>
     </tr>
 </table>

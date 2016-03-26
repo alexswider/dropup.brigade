@@ -1,6 +1,6 @@
 <h3>
     Clients 
-    <?= $this->Html->link('Logs', ['controller' => 'logs', 'action' => 'show', 'clients']) ?>
+    <?= $userData['level'] > 3 ? $this->Html->link('Logs', ['controller' => 'logs', 'action' => 'show', 'clients']) : '' ?>
 </h3>
 <table>
     <tr>

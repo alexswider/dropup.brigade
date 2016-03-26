@@ -27,7 +27,8 @@ class ProjectsController extends AppController {
         $projects = $this->Projects
                 ->find()
                 ->contain('Clients')
-                ->where(['Clients.slug' => $slug]);
+                ->where(['Clients.slug' => $slug])
+                ->order(['Projects.name' => 'ASC']);
         
         if (parent::getLevel() === 1 && $client['private']) {
             $this->loadModel('Permissions');
@@ -56,12 +57,15 @@ class ProjectsController extends AppController {
     }
     
     public function manage($id) {
+        $this->loadModel('Clients');
         $projects = $this->Projects
                 ->find()
                 ->where(['idClient' => $id]);
         
+        $client = $this->Clients->get($id);
+        
         $this->set('projects', $projects);
-        $this->set('idClient', $id);
+        $this->set('client', $client);
     }
     
     public function edit($id) {
@@ -80,16 +84,27 @@ class ProjectsController extends AppController {
     }
     
     public function delete($id) {
-        //TODO: usuwanie wszystkiego wyżej !!!
         $this->request->allowMethod(['post', 'delete']);
         
-        $this->loadModel('Projects');
+        $this->deleteItems($id);
         $project = $this->Projects->get($id);
         
         if ($this->Projects->delete($project)) {
             $this->Flash->success('The project has been deleted.');
             parent::addLog('projects', $id, 'Delete', 'Project has been deleted');
             return $this->redirect(['action' => 'manage', $project->idClient]);
+        }
+    }
+    
+    private function deleteItems($idProject) {
+        $this->loadModel('Items');
+        $ids = $this->Items
+                ->find()
+                ->select(['idItem'])
+                ->where(['idProject' => $idProject]);
+        
+        foreach ($ids as $id) {
+            $this->requestAction(['controller' => 'Items', 'action' => 'delete'], ['pass' => [$id->idItem]]);
         }
     }
     
