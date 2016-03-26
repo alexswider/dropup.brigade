@@ -1,5 +1,5 @@
-composer.phar
-composer.lock
+/composer.phar
+/composer.lock
 /config/app.php
 /nbproject/
 /webroot/uploads/
