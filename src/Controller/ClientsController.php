@@ -89,7 +89,7 @@ class ClientsController extends AppController {
                 ->where(['idClient' => $idClient]);
         
         foreach ($ids as $id) {
-            $this->requestAction(['controller' => 'projects', 'action' => 'delete'], ['pass' => [$id->idProject]]);
+            $this->requestAction(['controller' => 'Projects', 'action' => 'delete'], ['pass' => [$id->idProject]]);
         }
     }
 }

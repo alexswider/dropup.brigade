@@ -1,4 +1,4 @@
-<?php $this->Html->addCrumb($client['name'], ['action' => 'index', $client['slug']]) ?>
+<?php $this->Html->addCrumb($client->name, ['action' => 'index', $client->slug]) ?>
 <h3>
     Projects
     <?= $userData['level'] > 2 ? $this->Html->link('Manage', ['action' => 'manage', $client['idClient']]) : '' ?>
@@ -7,7 +7,7 @@
 <ul>
     <?php foreach ($projects as $project): ?>
     <li>
-        <?= $this->Html->link($project->name, ['controller' => 'projects', 'slug' => $project->slug]) ?>
+        <?= $this->Html->link($project->name, ['controller' => 'items', 'slug' => $project->slug]) ?>
     </li>
     <?php endforeach; ?>
 </ul>
