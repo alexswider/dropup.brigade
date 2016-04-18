@@ -77,6 +77,14 @@ Router::scope('/', function ($routes) {
     Router::connect('/items/:slug',
             ['controller'=>'items','action'=>'index'], 
             ['pass' => ['slug']]);
+    
+    Router::connect('/assets/add',
+            ['controller'=>'assets','action'=>'add']);
+    Router::connect('/assets/delete',
+            ['controller'=>'assets','action'=>'delete']);
+    Router::connect('/assets/:slug',
+            ['controller'=>'assets','action'=>'index'], 
+            ['pass' => ['slug']]);
 
     /**
      * Connect catchall routes for all controllers.

@@ -1,0 +1,27 @@
+form.dropzone {
+    position: relative;
+    margin-bottom: 60px;
+    padding-bottom: 80px;
+    width: 100%;
+    min-height: inherit;
+    border: 3px dashed #fff;
+    background: none;
+}
+
+form.dropzone .dz-preview.dz-image-preview {
+    background: none;
+}
+
+form.dropzone .input.number {
+    display: none;
+}
+
+form.dropzone button {
+    position: absolute;
+    bottom: 0;
+}
+
+.dz-filename {
+    top: 18px;
+    position: relative;
+}
