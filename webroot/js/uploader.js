@@ -27,8 +27,12 @@ $(function(){
     $('#dropzone button').click(function(){           
         dropzone.processQueue();
     });
-    $("form").submit(function(){
+    $("form.dropzone").submit(function(){
         event.preventDefault();
+    });
+    $('#assets').sortable();
+    $('#save-order').click(function() {
+        saveOrder();
     });
 });
 
@@ -85,4 +89,13 @@ function banner(file) {
         $('#width').val(split[0]);
         $('#height').val(split[1]);
     }
+}
+
+function saveOrder() {
+    var order = [];
+    $('.asset').each(function(i) {
+        order[i] = $(this).attr('id');
+    });
+    order = JSON.stringify(order);
+    $('#orderAsset').val(order);
 }

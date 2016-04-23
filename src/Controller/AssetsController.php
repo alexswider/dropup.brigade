@@ -18,7 +18,7 @@ class AssetsController extends AppController {
     
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
-        $this->Auth->allow(['index']);
+        $this->Auth->allow(['index', 'add', 'saveOrder']);
     }
     
     public function index($slug) {
@@ -60,7 +60,27 @@ class AssetsController extends AppController {
                 break;
         }
     }
-
+    
+    public function saveOrder($idItem) {
+        $this->request->allowMethod('post');
+        
+        $order = json_decode($this->request->data['orderAsset'], true);
+        
+        foreach ($order as $key => $id) {
+            $query = $this->Assets
+                    ->query()
+                    ->update()
+                    ->set(['orderAsset' => $key])
+                    ->where(['idItem' => $idItem, 'idAsset' => $id])
+                    ->execute();
+        }
+        
+        if ($query) {
+            $this->Flash->success(__('Order has been saved.'));
+            parent::addLog('items', $idItem, 'Order', "Order has been changed");
+        }
+        $this->redirect($this->request->referer());
+    }
 
     private function authorize($item, $client) {
         if(parent::getLevel() >= $item->access) {
