@@ -4,6 +4,7 @@ namespace App\Model\Table;
 
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
+use Cake\Validation\Validator;
 
 class AssetsTable extends Table {
     
@@ -11,6 +12,14 @@ class AssetsTable extends Table {
         $this->hasMany('Items', [
             'foreignKey' => 'idItem',
         ]);
+    }
+    
+    public function validationDefault(Validator $validator) {
+        $validator
+            ->notEmpty('width', 'A width is required')
+            ->notEmpty('height', 'A height is required');
+        
+        return $validator;
     }
     
     public function getItem($slug) {
@@ -21,5 +30,14 @@ class AssetsTable extends Table {
                 ->where(['Items.slug' => $slug])
                 ->contain(['Projects'])
                 ->first();
+    }
+    
+    public function getNextOrder($idItem) {
+        $query = $this->query();
+        
+        return $query
+                ->find('all')
+                ->where(['idItem' => $idItem])
+                ->count();
     }
 }

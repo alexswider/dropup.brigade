@@ -28,21 +28,7 @@ if (Configure::read('debug')):
     $this->end();
 endif;
 ?>
-        
-<?php
-$extension = explode(".", $url)[1];
-if (
-    $extension == "png" ||
-    $extension == "jpg" ||
-    $extension == "gif" ||
-    $extension == "html" ||
-    $extension == "mp4"
-) {
-    header('Location: https://s3-us-west-2.amazonaws.com/dropup' . $url, TRUE, 301);
-    die();
-}
-?>
-        
+
 <h2><?= h($message) ?></h2>
 <p class="error">
     <strong><?= __d('cake', 'Error') ?>: </strong>

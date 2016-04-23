@@ -5,14 +5,18 @@ var height = 0;
 $(function(){
     Dropzone.autoDiscover = false;
 
-    dropzone = new Dropzone("#dropzone", {
-        url: "<?= $this->Url->build(['action' => 'add', $item->idItem]) ?>",                        
+    dropzone = new Dropzone("#dropzone", {                 
         autoProcessQueue: false,
+        parallelUploads: 1000,
+        uploadMultiple: true,
         dictDefaultMessage: "Drop <strong>images/supergifs/video/ziped banner</strong> here"
     });
     //file.width and file.height working only if thumbail was generated
     dropzone.on("thumbnail", function(file) {
         checkType(file);
+    });
+    dropzone.on("success", function(file) {
+        location.reload();
     });
     dropzone.on("addedfile", function(file) {
         extension = file.name.split(".")[file.name.split(".").length - 1];
@@ -21,7 +25,7 @@ $(function(){
         }
     });
     $('#dropzone button').click(function(){           
-         dropzone.processQueue();
+        dropzone.processQueue();
     });
 });
 
@@ -36,7 +40,7 @@ function checkType(file) {
     }  else if(extension === "zip" && type === undefined) {
         banner(file);
     } else {
-        dropzone.removeFile(file)
+        dropzone.removeFile(file);
         alert("Only images(jpg, png), banners(zip), videos(mp4) and supergifs(gif) are alowed.\nYou can multiply upload images or supergifs");
     }
 }

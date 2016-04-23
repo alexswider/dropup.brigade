@@ -39,6 +39,8 @@ class AppView extends View
         parent::initialize();
         if ($this->request->controller === 'Items') {
             $this->loadHelper('Access');
+        } else if ($this->request->controller === 'Assets') {
+            $this->loadHelper('Asset');
         }
     }
 }
