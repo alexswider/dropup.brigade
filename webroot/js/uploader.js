@@ -5,7 +5,7 @@ var height = 0;
 $(function(){
     Dropzone.autoDiscover = false;
 
-    dropzone = new Dropzone("#dropzone", {                 
+    dropzone = new Dropzone("#dropzone", {
         autoProcessQueue: false,
         parallelUploads: 1000,
         uploadMultiple: true,
@@ -26,6 +26,9 @@ $(function(){
     });
     $('#dropzone button').click(function(){           
         dropzone.processQueue();
+    });
+    $("form").submit(function(){
+        event.preventDefault();
     });
 });
 
