@@ -14,11 +14,9 @@ class AssetHelper extends Helper {
             case 'image':
                 return $this->image($asset);
             case 'supergif':
-                
-                break;
+                return $this->supergif($asset);
             case 'banner':
-                
-                break;
+                return $this->banner($asset);
         }
     }
     
@@ -33,5 +31,22 @@ class AssetHelper extends Helper {
         $code .= '</video>';
         
         return $code;   
+    }
+    
+    private function banner($asset) {
+        return '<iframe width="' . $asset->width . '" height="' . $asset->height . '" src="' . self::PRE_URL . $asset->path . '/index.html"></iframe>';
+    }
+    
+    private function supergif($asset) {
+        $code = '<div class="supergif">';
+        $gifs = explode(';', $asset->path);
+        foreach($gifs as $gif) {
+            if(strlen($gif) > 0) {
+                $code .= '<img src="' . self::PRE_URL . $gif . '">';
+            }
+        }
+        $code .= '</div>';
+        
+        return $code;
     }
 }

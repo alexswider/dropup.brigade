@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Filesystem\Folder;
 use Cake\Event\Event;
 use Aws\S3\S3Client;
+use ZipArchive;
 
 class AssetsController extends AppController {
     
@@ -51,10 +53,10 @@ class AssetsController extends AppController {
                 }
                 break;
             case 'supergif':
-                $this->saveVideo($id);
+                $this->saveSupergif($id, $this->request->data('file'));
                 break;
             case 'banner':
-                $this->saveVideo($id);
+                $this->saveBanner($id, $this->request->data('file')[0]);
                 break;
         }
     }
@@ -115,6 +117,55 @@ class AssetsController extends AppController {
             return $this->Flash->error('Unable to add asset.');
         }
     }
+    private function saveSupergif($id, $files) {
+        $asset = $this->Assets->newEntity($this->request->data);
+        $asset->idItem = $id;
+        $asset->orderAsset = $this->Assets->getNextOrder($id);
+        
+        $size = 0;
+        $path = '';
+        foreach($files as $file) {
+            $size += $file['size'];
+            $tmpPath = DS . self::FOLDER . DS . $id . DS . uniqid(). '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
+            $this->uploadFile($file, $tmpPath);
+            $path .= $tmpPath . ';';
+        }
+        $asset->path = $path;
+        $asset->size = $size;
+        
+        if($result = $this->Assets->save($asset)) {
+            $this->Flash->success('New asset has been saved.');
+            parent::addLog('assets', $result->idAsset, 'Create', "Asset has been created");
+        } else {
+            return $this->Flash->error('Unable to add asset.');
+        }
+    }
+    
+    private function saveBanner($id, $file) {
+        $asset = $this->Assets->newEntity($this->request->data);
+        $asset->idItem = $id;
+        $asset->size = $file['size'];
+        $asset->orderAsset = $this->Assets->getNextOrder($id);
+
+        $path = pathinfo(realpath($file['tmp_name']), PATHINFO_DIRNAME);
+
+        $zip = new ZipArchive;
+        $res = $zip->open($file['tmp_name']);
+        $zip->extractTo($path = $path . DS . uniqid());
+        $zip->close();
+        
+        $asset->path = DS . self::FOLDER . DS . $id . DS . uniqid();
+        $this->uploadDir($path, $asset->path);
+        $folder = new Folder($path);
+        $folder->delete();
+        
+        if($result = $this->Assets->save($asset)) {
+            $this->Flash->success('New asset has been saved.');
+            parent::addLog('assets', $result->idAsset, 'Create', "Asset has been created");
+        } else {
+            return $this->Flash->error('Unable to add asset.');
+        }
+    }
     
     private function uploadFile($file, $destination) {
         $client = S3Client::factory([
@@ -129,6 +180,17 @@ class AssetsController extends AppController {
             'Key'        => $destination,
             'SourceFile' => $file['tmp_name'],
         ]);
+    }
+    
+    private function uploadDir($dir, $destination) {
+        $client = S3Client::factory([
+            'credentials' => [
+                'key'    => self::KEY,
+                'secret' => self::SECRET,
+            ] 
+            
+        ]);
+        $client->uploadDirectory($dir, self::BUCKET, $destination);
     }
    
 }
