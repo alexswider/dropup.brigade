@@ -20,6 +20,13 @@ class AssetHelper extends Helper {
         }
     }
     
+    public function formatBytes($size, $precision = 2) {
+        $base = log($size, 1024);
+        $suffixes = array('B', 'kB', 'MB', 'GB', 'TB');   
+
+        return round(pow(1024, $base - floor($base)), $precision) .' '. $suffixes[floor($base)];
+    }
+    
     private function image($asset) {
         return '<img src="' . self::PRE_URL . $asset->path . '" alt="' . $asset->description . '">';
     }

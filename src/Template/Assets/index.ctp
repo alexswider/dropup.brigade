@@ -33,9 +33,16 @@
 <div id="assets">
     <?php foreach($assets as $key => $asset): ?>
     <div class="asset" id="<?= $asset->idAsset ?>">
-        <p class="order">
+        <div class="order">
             <?= $key+1 ?>
-        </p>
+            <a class="show-meta">▼</a>
+            <div class="meta">
+                <p><a href="#<?= $asset->idAsset ?>">ANCHOR</a></p>
+                <?= $userData['level'] > 3 ? '<p>' . $this->Html->link('LOGS', ['controller' => 'logs', 'action' => 'show', 'assets', $asset->idAsset]) . '</p>' : '' ?>
+                <p><?= $asset->width ?> x <?= $asset->height ?></p>
+                <p><?= $this->Asset->formatBytes($asset->size) ?></p>
+            </div>
+        </div>
         <div class="clearfix"></div>
         <?= $this->Asset->display($asset); ?>
         <p>

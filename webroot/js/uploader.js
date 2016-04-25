@@ -15,9 +15,6 @@ $(function(){
     dropzone.on("thumbnail", function(file) {
         checkType(file);
     });
-    dropzone.on("success", function(file) {
-        location.reload();
-    });
     dropzone.on("addedfile", function(file) {
         extension = file.name.split(".")[file.name.split(".").length - 1];
         if(extension !== "jpg" && extension !== "png" && extension !== "gif") {
@@ -27,8 +24,20 @@ $(function(){
     $('#dropzone button').click(function(){           
         dropzone.processQueue();
     });
+    dropzone.on("sending", function(file) {
+        var $elem = $("body, *");
+        $elem.attr('style', $elem.attr('style') + '; ' + 'cursor: wait !important');
+        $('#dropzone button').attr('disabled', 'disabled');
+    });
     $("form.dropzone").submit(function(){
         event.preventDefault();
+    });
+    dropzone.on("success", function(file) {
+        location.reload();
+    });
+    $('.show-meta').click(function() {
+        $(this).html() === "▼" ? $(this).html('▲') : $(this).html('▼');
+        $(this).next('.meta').toggle();
     });
     $('#assets').sortable();
     $('#save-order').click(function() {
@@ -98,4 +107,13 @@ function saveOrder() {
     });
     order = JSON.stringify(order);
     $('#orderAsset').val(order);
+}
+
+function formatBytes(bytes,decimals) {
+   if(bytes === 0) return '0 Byte';
+   var k = 1000; // or 1024 for binary
+   var dm = decimals + 1 || 3;
+   var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+   var i = Math.floor(Math.log(bytes) / Math.log(k));
+   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
