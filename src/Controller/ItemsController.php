@@ -91,10 +91,13 @@ class ItemsController extends AppController {
     }
     
     public function delete($id) {
-        //TODO: usuwanie wszystkiego wyżej !!!
         $this->request->allowMethod(['post', 'delete']);
         
         $item = $this->Items->get($id);
+        
+        $this->loadModel('Assets');
+        $this->Assets->deleteAll(['idItem' => $id]);
+        $this->Assets->deleteDir(parent::FOLDER . DS . $id);
         
         if ($this->Items->delete($item)) {
             $this->Flash->success('The item has been deleted.');

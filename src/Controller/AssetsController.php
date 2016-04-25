@@ -5,16 +5,9 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Filesystem\Folder;
 use Cake\Event\Event;
-use Aws\S3\S3Client;
 use ZipArchive;
 
 class AssetsController extends AppController {
-    
-    const KEY = 'AKIAJD6RN74BRAHETV3Q';
-    const SECRET = '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';
-    const BUCKET = 'dropup';
-    const FOLDER = 'test';
-    const ACCES_KEY = 'AE5HqedyZZGo3YQ';
     
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
@@ -105,8 +98,8 @@ class AssetsController extends AppController {
         $asset->size = $file['size'];
         $asset->orderAsset = $this->Assets->getNextOrder($id);
         
-        $asset->path = DS . self::FOLDER . DS . $id . DS . uniqid(). '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
-        $this->uploadFile($file, $asset->path);
+        $asset->path = DS . parent::FOLDER . DS . $id . DS . uniqid(). '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
+        $this->Assets->uploadFile($file, $asset->path);
         
         if($result = $this->Assets->save($asset)) {
             $this->Flash->success('New asset has been saved.');
@@ -127,8 +120,8 @@ class AssetsController extends AppController {
         $asset->height = $dimensions[1];
         $asset->orderAsset = $this->Assets->getNextOrder($id);
         
-        $asset->path = DS . self::FOLDER . DS . $id . DS . uniqid(). '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
-        $this->uploadFile($file, $asset->path);
+        $asset->path = DS . parent::FOLDER . DS . $id . DS . uniqid(). '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
+        $this->Assets->uploadFile($file, $asset->path);
         
         if($result = $this->Assets->save($asset)) {
             $this->Flash->success('New asset has been saved.');
@@ -146,8 +139,8 @@ class AssetsController extends AppController {
         $path = '';
         foreach($files as $file) {
             $size += $file['size'];
-            $tmpPath = DS . self::FOLDER . DS . $id . DS . uniqid(). '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
-            $this->uploadFile($file, $tmpPath);
+            $tmpPath = DS . parent::FOLDER . DS . $id . DS . uniqid(). '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
+            $this->Assets->uploadFile($file, $tmpPath);
             $path .= $tmpPath . ';';
         }
         $asset->path = $path;
@@ -174,8 +167,8 @@ class AssetsController extends AppController {
         $zip->extractTo($path = $path . DS . uniqid());
         $zip->close();
         
-        $asset->path = DS . self::FOLDER . DS . $id . DS . uniqid();
-        $this->uploadDir($path, $asset->path);
+        $asset->path = DS . parent::FOLDER . DS . $id . DS . uniqid();
+        $this->Assets->uploadDir($path, $asset->path);
         $folder = new Folder($path);
         $folder->delete();
         
@@ -186,31 +179,4 @@ class AssetsController extends AppController {
             return $this->Flash->error('Unable to add asset.');
         }
     }
-    
-    private function uploadFile($file, $destination) {
-        $client = S3Client::factory([
-            'credentials' => [
-                'key'    => self::KEY,
-                'secret' => self::SECRET,
-            ] 
-            
-        ]);
-        $result = $client->putObject([
-            'Bucket'     => self::BUCKET,
-            'Key'        => $destination,
-            'SourceFile' => $file['tmp_name'],
-        ]);
-    }
-    
-    private function uploadDir($dir, $destination) {
-        $client = S3Client::factory([
-            'credentials' => [
-                'key'    => self::KEY,
-                'secret' => self::SECRET,
-            ] 
-            
-        ]);
-        $client->uploadDirectory($dir, self::BUCKET, $destination);
-    }
-   
 }

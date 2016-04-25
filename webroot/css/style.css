@@ -136,6 +136,10 @@ iframe {
     font-family: 'Turnpike', Arial, sans-serif;
 }
 
+.supergif img {
+    display: block;
+}
+
 .container p {
     margin-bottom: 0;
 }
