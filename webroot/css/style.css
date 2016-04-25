@@ -129,6 +129,7 @@ iframe {
     background: #f00;
     color: #000;
     font-family: 'Turnpike', Arial, sans-serif;
+    z-index: 1;
 }
 
 .asset a {
